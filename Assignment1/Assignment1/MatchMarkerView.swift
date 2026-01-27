@@ -30,8 +30,8 @@ struct MatchMarkerView: View {
     }
     
     func DrawMarker(peg: Int) -> some View {
-        let exactCount = matchs.count(where: { match in match == .exact })
-        let foundCount = matchs.count(where: { match in match != .nomatch })
+        let exactCount = matchs.count { $0 == .exact }
+        let foundCount = matchs.count { $0 != .nomatch }
         return Circle()
             .fill(exactCount > peg ? Color.primary : Color.clear)
             .strokeBorder(foundCount > peg ? Color.primary : Color.clear, lineWidth: 2)
