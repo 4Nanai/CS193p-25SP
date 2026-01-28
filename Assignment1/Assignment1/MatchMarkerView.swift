@@ -23,18 +23,18 @@ struct MatchMarkerView: View {
         VStack {
             HStack {
                 ForEach(0..<col, id: \.self) {peg in
-                    DrawMarker(peg: peg)
+                    drawMarker(peg: peg)
                 }
             }
             HStack {
                 ForEach(col..<col*2, id: \.self) {peg in
-                    DrawMarker(peg: peg)
+                    drawMarker(peg: peg)
                 }
             }
         }
     }
     
-    func DrawMarker(peg: Int) -> some View {
+    func drawMarker(peg: Int) -> some View {
         let exactCount = matchs.count { $0 == .exact }
         let foundCount = matchs.count { $0 != .nomatch }
         return Circle()
@@ -52,6 +52,11 @@ struct MatchMarkerPreview: View {
                 Circle()
             }
             MatchMarkerView(matchs: matchs)
+            if matchs.count < 6 {
+                ForEach(0..<(6 - matchs.count), id: \.self) { _ in
+                    Circle().opacity(0)
+                }
+            }
         }
         .padding()
     }
