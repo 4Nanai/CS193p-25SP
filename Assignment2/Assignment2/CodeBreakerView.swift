@@ -85,7 +85,7 @@ struct CodeBreakerView: View {
                                 .aspectRatio(1, contentMode: .fit)
                         case .color(let name):
                             Circle()
-                                .fill(name.toColor)
+                                .fill(Color(name: name) ?? .gray)
                         case .emoji(let text):
                             Text(text)
                                 .font(.system(size: 120))
@@ -113,17 +113,22 @@ struct CodeBreakerView: View {
     }
 }
 
-extension String {
-    var toColor: Color {
-        switch self {
-        case "red": return .red
-        case "blue": return .blue
-        case "yellow": return .yellow
-        case "green": return .green
-        case "gray": return .gray
-        case "orange": return .orange
-        case "purple": return .purple
-        default: return .gray
+extension Color {
+    // init? indicates that this is a failable initializer
+    // If it can't find a matching color, it will return nil
+    init?(name: String) {
+        switch name.lowercased() {
+        case "red":     self = .red
+        case "blue":    self = .blue
+        case "green":   self = .green
+        case "yellow":  self = .yellow
+        case "orange":  self = .orange
+        case "purple":  self = .purple
+        case "black":   self = .black
+        case "white":   self = .white
+        case "gray":    self = .gray
+        case "clear":   self = .clear
+        default:        return nil
         }
     }
 }
