@@ -20,15 +20,11 @@ struct MatchMarkerView: View {
         max(2, (matchs.count + 1) / 2)
     }
     var body: some View {
-        VStack {
-            HStack {
-                ForEach(0..<col, id: \.self) {peg in
-                    drawMarker(peg: peg)
-                }
-            }
-            HStack {
-                ForEach(col..<col*2, id: \.self) {peg in
-                    drawMarker(peg: peg)
+        HStack {
+            ForEach(0..<col, id: \.self) { index in
+                VStack {
+                    drawMarker(peg: index * 2)
+                    drawMarker(peg: index * 2 + 1)
                 }
             }
         }
