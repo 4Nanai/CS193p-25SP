@@ -16,14 +16,18 @@ struct CodeBreaker {
     // Configurable peg count
     var pegCount: Int
     
-    init(pegChoices: [Peg]) {
+    init(pegChoices: [Peg], pegCount: Int) {
         self.pegChoices = pegChoices
-        // Set pegCount based on the number of pegChoices
-        self.pegCount = pegChoices.count
-        self.masterCode = Code(kind: .master, count: self.pegCount)
-        self.guess = Code(kind: .guess, count: self.pegCount)
-        masterCode.randomize(from: pegChoices)
+        // Configurable pegCount
+        self.pegCount = pegCount
+        self.masterCode = Code(kind: .master, count: pegCount)
+        self.guess = Code(kind: .guess, count: pegCount)
+        masterCode.randomize(from: pegChoices, for: pegCount)
         print(masterCode)
+    }
+    
+    init(pegChoices: [Peg]) {
+        self.init(pegChoices: pegChoices, pegCount: Int.random(in: 3...6))
     }
     
     mutating func changeGuessPeg(at index: Int) {
@@ -55,8 +59,10 @@ struct CodeBreaker {
     }
     
     mutating func restartGame() {
-        masterCode.randomize(from: pegChoices)
-        guess = Code(kind: .guess, count: pegCount)
+        let randomCount = Int.random(in: 3...6)
+        self.masterCode = Code(kind: .master, count: randomCount)
+        self.masterCode.randomize(from: pegChoices, for: randomCount)
+        self.guess = Code(kind: .guess, count: randomCount)
         attempts = []
     }
 }
@@ -79,8 +85,8 @@ struct Code: Equatable {
         case unknown
     }
     
-    mutating func randomize(from pegChoice: [Peg]) {
-        for index in pegChoice.indices {
+    mutating func randomize(from pegChoice: [Peg], for count: Int) {
+        for index in 0..<count {
             pegs[index] = pegChoice.randomElement() ?? Code.missing
         }
     }
