@@ -18,32 +18,6 @@ struct CodeBreaker {
     let initMode: GameMode
     let initSet: [Peg]
     
-    static let faceTheme: [Peg] = [
-        .emoji("😑"),
-        .emoji("😁"),
-        .emoji("😉"),
-        .emoji("😩"),
-        .emoji("😅"),
-        .emoji("😇")
-    ]
-    static let colorTheme: [Peg] = [
-        .color("red"),
-        .color("blue"),
-        .color("yellow"),
-        .color("green"),
-        .color("purple"),
-        .color("orange")
-    ]
-    
-    static let earthTheme: [Peg] = [
-        .emoji("🐶"),
-        .emoji("🐱"),
-        .emoji("🐭"),
-        .emoji("🐹"),
-        .emoji("🐰"),
-        .emoji("🦊"),
-    ]
-    
     // Configurable peg count
     var pegCount: Int
     
@@ -66,7 +40,7 @@ struct CodeBreaker {
     init() {
         let gameMode = GameMode.random()
         self.init(
-            pegChoices: gameMode == .color ? CodeBreaker.colorTheme : CodeBreaker.faceTheme,
+            pegChoices: gameMode.theme,
             pegCount: Int.random(in: 3...6),
             mode: gameMode
         )
@@ -107,14 +81,7 @@ struct CodeBreaker {
         if self.gameMode == self.initMode {
             self.pegChoices = self.initSet
         } else {
-            switch self.gameMode {
-            case .color:
-                self.pegChoices = CodeBreaker.colorTheme
-            case .face:
-                self.pegChoices = CodeBreaker.faceTheme
-            case .earth:
-                self.pegChoices = CodeBreaker.earthTheme
-            }
+            self.pegChoices = gameMode.theme
         }
             
         self.masterCode = Code(kind: .master, count: randomCount)
@@ -198,13 +165,33 @@ enum GameMode: CaseIterable {
     case face
     case earth
     
+    var theme: [Peg] {
+        switch self {
+        case .color:
+            return [
+                .color("red"), .color("blue"), .color("yellow"),
+                    .color("green"), .color("purple"), .color("orange")
+            ]
+        case .face:
+            return [
+                .emoji("😑"), .emoji("😁"), .emoji("😉"),
+                    .emoji("😩"), .emoji("😅"), .emoji("😇")
+            ]
+        case .earth:
+            return [
+                .emoji("🐶"),.emoji("🐱"), .emoji("🐭"),
+                    .emoji("🐹"), .emoji("🐰"), .emoji("🦊")
+            ]
+        }
+    }
+    
     static func random() -> GameMode {
         GameMode.allCases.randomElement() ?? .face
     }
     
     func nextGame() -> GameMode {
-        GameMode.allCases.filter { game in
-            game != self
+        GameMode.allCases.filter {
+            $0 != self
         }.randomElement() ?? self
     }
 }
