@@ -15,10 +15,13 @@ enum Match {
 }
 
 struct MatchMarkerView: View {
+    // MARK: Data In
     let matchs: [Match]
     var col: Int {
         max(2, (matchs.count + 1) / 2)
     }
+    
+    // MARK: - Body
     var body: some View {
         HStack {
             ForEach(0..<col, id: \.self) { index in

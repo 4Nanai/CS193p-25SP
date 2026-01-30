@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CodeBreakerView: View {
+    // MARK: Data Owned by Me
     @State var game = CodeBreaker(
 //        pegChoices: [
 //            .color("red"),
@@ -30,6 +31,7 @@ struct CodeBreakerView: View {
         mode: .face
     )
     
+    // MARK: - Body
     var body: some View {
         VStack {
             title.font(.title)
@@ -84,24 +86,7 @@ struct CodeBreakerView: View {
     func view(for code: Code) -> some View {
         HStack {
             ForEach(code.pegs.indices, id:\.self) { index in
-                Circle()
-                    .fill(.clear)
-                    .overlay {
-                        switch code.pegs[index] {
-                        case .clear:
-                            Circle()
-                                .strokeBorder(.gray, lineWidth: 2)
-                                .aspectRatio(1, contentMode: .fit)
-                        case .color(let name):
-                            Circle()
-                                .fill(Color(name: name) ?? .gray)
-                        case .emoji(let text):
-                            Text(text)
-                                .font(.system(size: 120))
-                                .minimumScaleFactor(9/120)
-                        }
-                    }
-                    .contentShape(Circle())
+                PegView(peg: code.pegs[index])
                     .onTapGesture {
                         // Handle color change
                         if code.kind == .guess {
