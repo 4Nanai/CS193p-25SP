@@ -9,13 +9,13 @@ import SwiftUI
 
 struct WordRowView: View {
     // MARK: Data In
-    let word: String
+    let word: Word
     var matchs: [Match]? = nil
     
     // MARK: - Body
     var body: some View {
         HStack {
-            ForEach(Array(word.enumerated()), id: \.offset) {
+            ForEach(Array(word.word.enumerated()), id: \.offset) {
                 index,
                 char in
                 RoundedRectangle(cornerRadius: 10)
@@ -70,7 +70,7 @@ extension Color {
 
 #Preview {
     WordRowView(
-        word: "Hello",
+        word: Word(word: "Hello", kind: .master),
         matchs: [.exact, .inexact, .exact, .nomatch]
     )
     .padding()

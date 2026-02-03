@@ -8,14 +8,27 @@
 import SwiftUI
 
 struct WordleView: View {
+    // MARK: Data Owned by Me
+    @State var game = WordBreaker()
     
     // MARK: - Body
     var body: some View {
         VStack {
-            WordRowView(word: "hello")
+            WordRowView(word: game.masterWord)
             Divider()
                 .padding(.vertical, 5)
-            WordRowView(word: "guess", matchs: [.exact, .inexact, .exact, .nomatch, .nomatch])
+            WordRowView(
+                word: game.guess,
+                matchs: [.exact, .inexact, .exact, .nomatch, .nomatch]
+            )
+            Text("History:")
+                .font(.callout)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            ScrollView {
+                ForEach(game.attempts.indices, id: \.self) { index in
+                    WordRowView(word: game.attempts[index])
+                }
+            }
             Spacer()
             HintView()
             guessButton
@@ -26,7 +39,7 @@ struct WordleView: View {
     
     var guessButton: some View {
         Button {
-            print("Guess")
+            game.attemptGuess()
         } label: {
             Text("Guess")
                 .font(.title2)
