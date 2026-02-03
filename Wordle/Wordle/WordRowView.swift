@@ -10,7 +10,13 @@ import SwiftUI
 struct WordRowView: View {
     // MARK: Data In
     let word: Word
-    var matchs: [Match]? = nil
+    
+    private var matchs: [Match]? {
+        switch word.kind {
+        case .attempts(let matchs): return matchs
+        default: return nil
+        }
+    }
     
     // MARK: - Body
     var body: some View {
@@ -69,9 +75,28 @@ extension Color {
 }
 
 #Preview {
-    WordRowView(
-        word: Word(word: "Hello", kind: .master),
-        matchs: [.exact, .inexact, .exact, .nomatch]
-    )
+    VStack {
+        WordRowView(
+            word: Word(word: "Master", kind: .master)
+        )
+        WordRowView(word: Word(word: "Guess", kind: .guess))
+        WordRowView(
+            word: Word(
+                word: "History",
+                kind:
+                        .attempts(
+                            [
+                                .exact,
+                                .inexact,
+                                .nomatch,
+                                .inexact,
+                                .exact,
+                                .inexact,
+                                .nomatch
+                            ]
+                        )
+            )
+        )
+    }
     .padding()
 }

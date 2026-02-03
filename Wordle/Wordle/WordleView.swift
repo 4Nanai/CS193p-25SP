@@ -18,12 +18,13 @@ struct WordleView: View {
             Divider()
                 .padding(.vertical, 5)
             WordRowView(
-                word: game.guess,
-                matchs: [.exact, .inexact, .exact, .nomatch, .nomatch]
+                word: game.guess
             )
-            Text("History:")
-                .font(.callout)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            if !game.attempts.isEmpty {
+                Text("History:")
+                    .font(.callout)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
             ScrollView {
                 ForEach(game.attempts.indices, id: \.self) { index in
                     WordRowView(word: game.attempts[index])
@@ -39,7 +40,9 @@ struct WordleView: View {
     
     var guessButton: some View {
         Button {
-            game.attemptGuess()
+            withAnimation {
+                game.attemptGuess()
+            }
         } label: {
             Text("Guess")
                 .font(.title2)
